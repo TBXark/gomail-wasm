@@ -1,0 +1,13 @@
+{
+  "name": "gomail-wasm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tbxark <tbxark@outlook.com>",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "parse.js",
+    "static/mailwasm.js",
+    "static/wasm_exec.js"
+  ]
+}

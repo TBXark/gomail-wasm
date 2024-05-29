@@ -1,0 +1,28 @@
+<html lang="en">
+<body>
+    <h5>Message ID</h5>
+    <p id="message-id"></p>
+    <h5>Subject</h5>
+    <p id="subject"></p>
+    <h5>HTML</h5>
+    <p id="html"></p>
+    <h5>Text</h5>
+    <p id="text"></p>
+</body>
+<script src="static/wasm_exec.js"></script>
+<script type="module">
+    import  {parseMail} from "./parse.js"
+    async function main() {
+        const rawMail = await fetch("static/test.eml")
+        const raw = new Uint8Array(await rawMail.arrayBuffer())
+        const mail = await parseMail(raw)
+        console.log(mail)
+        document.getElementById("message-id").innerText = mail.messageId
+        document.getElementById("subject").innerText = mail.subject
+        document.getElementById("html").innerText = mail.html
+        document.getElementById("text").innerText = mail.text
+    }
+    main()
+</script>
+
+</html>

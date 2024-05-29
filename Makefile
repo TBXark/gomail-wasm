@@ -1,7 +1,7 @@
 .PHONY: build
 build:
-	cp "$$(go env GOROOT)/misc/wasm/wasm_exec.js" ./static/
-	GOOS=js GOARCH=wasm go build -o static/mail.wasm
+	cp "$$(tinygo env TINYGOROOT)/targets/wasm_exec.js" ./static/
+	tinygo build -o static/mail.wasm -target wasm ./mail.go
 
 .PHONY: base64
 base64:

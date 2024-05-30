@@ -7,7 +7,7 @@
   "type": "module",
   "files": [
     "parse.js",
-    "go.js"
+    "static/wasm_exec.js"
   ],
   "exports": {
     ".": {

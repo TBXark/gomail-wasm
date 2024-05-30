@@ -9,13 +9,12 @@
     <h5>Text</h5>
     <p id="text"></p>
 </body>
-<script src="static/wasm_exec.js"></script>
 <script type="module">
-    import  {parseMail} from "./parse.js"
+    import  {parseMail,urlLoader} from "./parse.js"
+    window.global = window
     async function main() {
-        const rawMail = await fetch("static/test.eml")
-        const raw = new Uint8Array(await rawMail.arrayBuffer())
-        const mail = await parseMail(raw)
+        const rawMail = await fetch("static/test.eml").then(response => response.arrayBuffer()).then(buffer => new Uint8Array(buffer))
+        const mail = await parseMail(rawMail, urlLoader("static/mail.wasm"))
         console.log(mail)
         document.getElementById("message-id").innerText = mail.messageId
         document.getElementById("subject").innerText = mail.subject
@@ -24,5 +23,4 @@
     }
     main()
 </script>
-
 </html>

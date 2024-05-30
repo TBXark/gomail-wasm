@@ -1,5 +1,3 @@
-import { Go } from "./go.js";
-
 /**
  * @typedef {Object} MailParseResult
  * @property {string} messageId
@@ -11,12 +9,14 @@ import { Go } from "./go.js";
 /**
  * Parse email
  * @param {Uint8Array} raw - email raw data
- * @param {function(): Promise<ArrayBuffer>} wasmLoader - wasm loader
+ * @param {Promise<ArrayBuffer> | function(): Promise<ArrayBuffer>} wasmLoader - wasm loader
  * @returns {Promise<MailParseResult>}
  */
 export async function parseMail(raw, wasmLoader) {
+    await import("./static/wasm_exec.js" )
     const go = new Go()
-    const wasm = await wasmLoader()
+    const loader = wasmLoader || defaultLoader
+    const wasm = typeof loader === "function" ? await loader() : await loader
     const result = await WebAssembly.instantiate(wasm, go.importObject)
     go.run(result.instance)
     const mailJson = parseEmail(raw)

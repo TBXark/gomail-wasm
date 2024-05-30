@@ -1,12 +1,17 @@
 {
   "name": "gomail-wasm",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "index.js",
-  "author": "tbxark <tbxark@outlook.com>",
+  "author": "tbxark",
   "license": "MIT",
   "type": "module",
   "files": [
     "parse.js",
     "go.js"
-  ]
+  ],
+  "exports": {
+    ".": {
+      "import": "./parse.js"
+    }
+  }
 }

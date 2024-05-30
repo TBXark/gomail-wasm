@@ -1,4 +1,4 @@
-import { Go} from "./go.js";
+import { Go } from "./go.js";
 
 /**
  * @typedef {Object} MailParseResult
@@ -20,7 +20,7 @@ export async function parseMail(raw, wasmLoader) {
     const result = await WebAssembly.instantiate(wasm, go.importObject)
     go.run(result.instance)
     const mailJson = parseEmail(raw)
-    return  JSON.parse(mailJson)
+    return JSON.parse(mailJson)
 }
 
 /**

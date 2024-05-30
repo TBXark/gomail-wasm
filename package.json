@@ -7,7 +7,6 @@
   "type": "module",
   "files": [
     "parse.js",
-    "static/mailwasm.js",
-    "static/wasm_exec.js"
+    "go.js"
   ]
 }

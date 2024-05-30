@@ -1,15 +1,42 @@
-import "./static/wasm_exec.js"
-import { mailWasmBase64 } from "./static/mailwasm.js"
+import { Go} from "./go.js";
 
-export async function parseMail(raw) {
+/**
+ * @typedef {Object} MailParseResult
+ * @property {string} messageId
+ * @property {string} subject
+ * @property {string} html
+ * @property {string} text
+ */
+
+/**
+ * Parse email
+ * @param {Uint8Array} raw - email raw data
+ * @param {function(): Promise<ArrayBuffer>} wasmLoader - wasm loader
+ * @returns {Promise<MailParseResult>}
+ */
+export async function parseMail(raw, wasmLoader) {
     const go = new Go()
-    const wasmStrBuffer = atob(mailWasmBase64)
-    const wasmCodeArray = new Uint8Array(wasmStrBuffer.length);
-    for (let i = 0; i < wasmStrBuffer.length; i++) {
-        wasmCodeArray[i] = wasmStrBuffer.charCodeAt(i);
-    }
-    const result = await WebAssembly.instantiate(wasmCodeArray, go.importObject)
+    const wasm = await wasmLoader()
+    const result = await WebAssembly.instantiate(wasm, go.importObject)
     go.run(result.instance)
     const mailJson = parseEmail(raw)
     return  JSON.parse(mailJson)
+}
+
+/**
+ * Wasm loader
+ * @param {string} url
+ * @returns {Promise<ArrayBuffer>}
+ */
+export async function urlLoader(url) {
+    const response = await fetch(url)
+    return await response.arrayBuffer()
+}
+
+/**
+ * Default wasm loader
+ * @returns {Promise<ArrayBuffer>}
+ */
+export async function defaultLoader() {
+    return urlLoader("https://raw.githubusercontent.com/TBXark/gomail-wasm/master/static/mail.wasm")
 }
